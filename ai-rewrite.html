@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI文案改写工具 - 小红书 & 抖音</title>
+    <link rel="stylesheet" href="ai-rewrite.css">
+</head>
+<body>
+    <!-- 动态背景 -->
+    <div class="background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <div class="logo">
+                <svg width="36" height="36" viewBox="0 0 36 36">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea"/>
+                            <stop offset="50%" style="stop-color:#764ba2"/>
+                            <stop offset="100%" style="stop-color:#f093fb"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="18" cy="18" r="16" fill="none" stroke="url(#logoGrad)" stroke-width="2.5"/>
+                    <path d="M12 12 L12 24 M18 12 L18 24 M24 12 L24 24" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+                <span>AI文案改写</span>
+            </div>
+            <nav class="nav-tabs">
+                <a href="media-downloader.html" class="nav-tab">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M10 2 L10 14 M5 9 L10 14 L15 9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="3" y="16" width="14" height="2" rx="1" fill="currentColor"/>
+                    </svg>
+                    去水印
+                </a>
+                <a href="ai-rewrite.html" class="nav-tab active">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path d="M3 10 C3 10 5 4 10 4 C15 4 17 10 17 10 C17 10 15 16 10 16 C5 16 3 10 3 10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        <circle cx="10" cy="10" r="2" fill="currentColor"/>
+                    </svg>
+                    AI改写
+                </a>
+            </nav>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 平台选择 -->
+            <div class="platform-selector">
+                <h2>选择目标平台</h2>
+                <div class="platform-cards">
+                    <div class="platform-card" data-platform="xiaohongshu">
+                        <div class="platform-icon xhs-icon">📕</div>
+                        <h3>小红书</h3>
+                        <p class="platform-desc">标题20字 · 正文1000字</p>
+                        <div class="platform-features">
+                            <span class="feature-tag">生活化</span>
+                            <span class="feature-tag">种草风</span>
+                            <span class="feature-tag">表情符号</span>
+                        </div>
+                    </div>
+                    <div class="platform-card" data-platform="douyin">
+                        <div class="platform-icon dy-icon">🎵</div>
+                        <h3>抖音</h3>
+                        <p class="platform-desc">标题30字 · 正文2000字</p>
+                        <div class="platform-features">
+                            <span class="feature-tag">短视频</span>
+                            <span class="feature-tag">话题标签</span>
+                            <span class="feature-tag">互动性</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 编辑区域 -->
+            <div class="editor-section" id="editorSection" style="display: none;">
+                <div class="editor-container">
+                    <!-- 左侧：原文输入 -->
+                    <div class="editor-panel">
+                        <div class="panel-header">
+                            <h3>📝 原始文案</h3>
+                            <button class="btn-clear" id="clearOriginal">清空</button>
+                        </div>
+                        <div class="input-area">
+                            <div class="input-group">
+                                <label>标题</label>
+                                <input 
+                                    type="text" 
+                                    id="originalTitle" 
+                                    placeholder="输入原始标题..."
+                                    maxlength="100"
+                                >
+                                <span class="char-count" id="titleCount">0/100</span>
+                            </div>
+                            <div class="input-group">
+                                <label>正文</label>
+                                <textarea 
+                                    id="originalContent" 
+                                    placeholder="输入原始正文内容..."
+                                    rows="15"
+                                ></textarea>
+                                <span class="char-count" id="contentCount">0</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="rewriteBtn">
+                                <svg width="20" height="20" viewBox="0 0 20 20">
+                                    <path d="M2 10 A8 8 0 1 1 10 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                    <path d="M10 2 L10 6 L14 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                AI智能改写
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：改写结果 -->
+                    <div class="editor-panel">
+                        <div class="panel-header">
+                            <h3>✨ 改写结果</h3>
+                            <div class="header-actions">
+                                <span class="platform-badge" id="currentPlatform"></span>
+                                <button class="btn-copy" id="copyResult">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <rect x="2" y="2" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                        <path d="M6 2 L6 0 L16 0 L16 10 L14 10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                    </svg>
+                                    复制全部
+                                </button>
+                            </div>
+                        </div>
+                        <div class="result-area" id="resultArea">
+                            <div class="empty-state">
+                                <svg width="80" height="80" viewBox="0 0 80 80">
+                                    <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+                                    <path d="M25 40 L35 50 L55 30" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
+                                </svg>
+                                <p>点击"AI智能改写"生成内容</p>
+                            </div>
+                        </div>
+                        <div class="result-content" id="resultContent" style="display: none;">
+                            <div class="result-group">
+                                <label>改写标题</label>
+                                <div class="result-text" id="rewrittenTitle"></div>
+                                <span class="char-count" id="newTitleCount"></span>
+                            </div>
+                            <div class="result-group">
+                                <label>改写正文</label>
+                                <div class="result-text scrollable" id="rewrittenContent"></div>
+                                <span class="char-count" id="newContentCount"></span>
+                            </div>
+                            <div class="rewrite-options">
+                                <button class="btn btn-secondary" id="regenerateBtn">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M2 8 A6 6 0 1 1 8 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                        <path d="M8 2 L8 5 L11 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    重新生成
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 改写设置 -->
+                <div class="rewrite-settings">
+                    <h3>⚙️ 改写设置</h3>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label>改写风格</label>
+                            <select id="styleSelect">
+                                <option value="natural">自然流畅</option>
+                                <option value="professional">专业正式</option>
+                                <option value="casual">轻松活泼</option>
+                                <option value="emotional">情感丰富</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>创新程度</label>
+                            <select id="creativitySelect">
+                                <option value="low">保守（相似度高）</option>
+                                <option value="medium" selected>适中（平衡）</option>
+                                <option value="high">创新（差异大）</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="addEmoji" checked>
+                                <span>添加表情符号</span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="addHashtag" checked>
+                                <span>添加话题标签</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 功能说明 -->
+            <div class="features-info">
+                <h3>✨ 功能特点</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🎯</div>
+                        <h4>平台适配</h4>
+                        <p>根据小红书、抖音平台特点，自动调整文案风格和字数</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🤖</div>
+                        <h4>AI智能</h4>
+                        <p>使用先进AI算法，保持原意的同时让文案更吸引人</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">⚡</div>
+                        <h4>快速生成</h4>
+                        <p>秒级生成高质量文案，支持多次重新生成</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🎨</div>
+                        <h4>风格多样</h4>
+                        <p>支持多种改写风格，满足不同场景需求</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部 -->
+        <footer class="footer">
+            <p>⚠️ AI改写仅供参考，请根据实际情况调整</p>
+            <p>建议人工审核后再发布，确保内容质量</p>
+        </footer>
+    </div>
+
+    <!-- 加载动画 -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <h3>AI正在改写中...</h3>
+            <p id="loadingText">正在分析原文...</p>
+        </div>
+    </div>
+
+    <script src="ai-rewrite.js"></script>
+</body>
+</html>
